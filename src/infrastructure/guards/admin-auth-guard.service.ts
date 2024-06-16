@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { AccessTokenService } from '../../common/token.services/access.token.service';
-import { tokenServiceCommands } from '../../common/token.services/utils/common';
+import { tokenServiceCommands } from '../../common/token.services/utils/types';
 
 export const AUTH_METHODS = {
   base: 'Basic',

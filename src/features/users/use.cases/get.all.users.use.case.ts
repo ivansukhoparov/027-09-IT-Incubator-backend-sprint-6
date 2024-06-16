@@ -1,8 +1,4 @@
-import {
-  QueryRequestType,
-  QuerySortType,
-  SearchType,
-} from '../../common/types';
+import { QueryRequestType, QuerySortType, SearchType } from '../../types/types';
 import { userMapper } from '../types/mapper';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { UsersQueryRepository } from '../infrastructure/users.query.repository';

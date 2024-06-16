@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { UserOutputMeType } from '../types/output';
-import { QuerySortType, SearchType } from '../../common/types';
+import { QuerySortType, SearchType } from '../../types/types';
 import { UserOutputModel } from '../api/admin/models/user.ouput.model';
 
 @Injectable()
