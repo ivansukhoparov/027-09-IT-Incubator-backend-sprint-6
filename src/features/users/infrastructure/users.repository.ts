@@ -1,13 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
-import { IUsersRepository } from './interfaces/users.repository.interface';
 import { CreateUserDto } from '../types/output';
-import { User } from './users.schema';
 import { UserUpdateDto } from '../types/input';
+import { User } from './enities/User';
 
 @Injectable()
-export class UsersRepository implements IUsersRepository {
+export class UsersRepository {
   constructor(@InjectDataSource() protected dataSource: DataSource) {}
 
   async createUser(newUserDto: CreateUserDto | User): Promise<string> {

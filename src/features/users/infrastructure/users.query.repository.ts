@@ -1,13 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
-import { IUsersQueryRepository } from './interfaces/users.query.repository.interface';
 import { UserOutputMeType } from '../types/output';
 import { QuerySortType, SearchType } from '../../common/types';
 import { UserOutputModel } from '../api/admin/models/user.ouput.model';
 
 @Injectable()
-export class UsersQueryRepository implements IUsersQueryRepository {
+export class UsersQueryRepository {
   constructor(@InjectDataSource() protected dataSource: DataSource) {}
 
   async getById(id: string): Promise<UserOutputModel> {

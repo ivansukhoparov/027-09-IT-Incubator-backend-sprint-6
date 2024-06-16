@@ -6,11 +6,11 @@ import { UsersQueryRepository } from './infrastructure/users.query.repository';
 import { CreateUserUseCase } from './use.cases/create.user.use.case';
 import { DeleteUserUseCase } from './use.cases/delete.user.use.case';
 import { GetAllUsersUseCase } from './use.cases/get.all.users.use.case';
-import { User } from './infrastructure/users.schema';
 import { BcryptAdapter } from '../../common/adapters/bcrypt.adapter';
 import { CqrsModule } from '@nestjs/cqrs';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserTokens } from './infrastructure/enities/UserTokens';
+import { User } from './infrastructure/enities/User';
 
 const useCases = [CreateUserUseCase, DeleteUserUseCase];
 
