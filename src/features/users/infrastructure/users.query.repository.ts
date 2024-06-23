@@ -37,12 +37,7 @@ export class UsersQueryRepository {
     }
   }
 
-  async getMany(
-    searchKey: SearchType,
-    sortKey: QuerySortType,
-    skipped: number,
-    pageSize: number,
-  ) {
+  async getMany(searchKey: SearchType, sortKey: QuerySortType, skipped: number, pageSize: number) {
     try {
       let searchString: string = '';
       const searchArray = Object.keys(searchKey).map((key: any) => {

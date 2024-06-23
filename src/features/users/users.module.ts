@@ -19,14 +19,7 @@ const queryCases = [GetAllUsersUseCase];
 @Module({
   imports: [CqrsModule, TypeOrmModule.forFeature([User, UserTokens])],
   controllers: [AdminUsersController],
-  providers: [
-    BcryptAdapter,
-    UsersService,
-    UsersRepository,
-    UsersQueryRepository,
-    ...useCases,
-    ...queryCases,
-  ],
+  providers: [BcryptAdapter, UsersService, UsersRepository, UsersQueryRepository, ...useCases, ...queryCases],
   exports: [UsersService, UsersQueryRepository, BcryptAdapter],
 })
 export class UsersModule {}
