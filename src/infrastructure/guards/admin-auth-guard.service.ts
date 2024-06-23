@@ -1,13 +1,6 @@
-import {
-  CanActivate,
-  ExecutionContext,
-  HttpException,
-  HttpStatus,
-  Injectable,
-} from '@nestjs/common';
+import { CanActivate, ExecutionContext, HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Observable } from 'rxjs';
-import { AccessTokenService } from '../../common/token.services/access.token.service';
-import { tokenServiceCommands } from '../../common/token.services/utils/types';
+import { AccessToken } from '../../common/token.services/access-token.service';
 
 export const AUTH_METHODS = {
   base: 'Basic',
@@ -16,9 +9,7 @@ export const AUTH_METHODS = {
 
 @Injectable()
 export class AdminAuthGuard implements CanActivate {
-  canActivate(
-    context: ExecutionContext,
-  ): boolean | Promise<boolean> | Observable<boolean> {
+  canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
     try {
       const request = context.switchToHttp().getRequest();
       const authHeader = request.header('authorization')?.split(' '); // Получаем значение поля в заголовке
@@ -29,10 +20,7 @@ export class AdminAuthGuard implements CanActivate {
       if (authInput === auth && authMethod === AUTH_METHODS.base) {
         return true;
       } else {
-        throw new HttpException(
-          'Bad login or password',
-          HttpStatus.UNAUTHORIZED,
-        );
+        throw new HttpException('Bad login or password', HttpStatus.UNAUTHORIZED);
       }
     } catch {
       throw new HttpException('Bad login or password', HttpStatus.UNAUTHORIZED);
@@ -42,25 +30,17 @@ export class AdminAuthGuard implements CanActivate {
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-  canActivate(
-    context: ExecutionContext,
-  ): boolean | Promise<boolean> | Observable<boolean> {
+  canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
     try {
       const request = context.switchToHttp().getRequest();
       const authHeader = request.header('authorization')?.split(' '); // Получаем значение поля в заголовке
       const authMethod = authHeader[0]; // получаем метод из заголовка
-      const token = new AccessTokenService(
-        tokenServiceCommands.set,
-        authHeader[1],
-      );
+      const token = new AccessToken();
 
-      if (token.verify() && authMethod === AUTH_METHODS.bearer) {
+      if (token.verify(authHeader[1]) && authMethod === AUTH_METHODS.bearer) {
         return true;
       } else {
-        throw new HttpException(
-          'Bad login or password',
-          HttpStatus.UNAUTHORIZED,
-        );
+        throw new HttpException('Bad login or password', HttpStatus.UNAUTHORIZED);
       }
     } catch {
       throw new HttpException('Bad login or password', HttpStatus.UNAUTHORIZED);

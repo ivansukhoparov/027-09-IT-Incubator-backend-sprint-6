@@ -1,12 +1,13 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { BadRequestException, ValidationPipe } from '@nestjs/common';
+import { ErrorsExceptionFilter, HttpExceptionFilter } from './infrastructure/exception-filters/http.exception.filter';
 import { useContainer } from 'class-validator';
-import { HttpExceptionFilter } from './infrastructure/exception-filters/http.exception.filter';
 import cookieParser from 'cookie-parser';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
   useContainer(app.select(AppModule), { fallbackOnErrors: true });
 
   app.useGlobalPipes(
@@ -26,9 +27,10 @@ async function bootstrap() {
       },
     }),
   );
-  app.useGlobalFilters(new HttpExceptionFilter());
-  app.use(cookieParser());
 
+  app.useGlobalFilters(new HttpExceptionFilter());
+  app.useGlobalFilters(new ErrorsExceptionFilter());
+  app.use(cookieParser());
   await app.listen(3000);
 }
 
