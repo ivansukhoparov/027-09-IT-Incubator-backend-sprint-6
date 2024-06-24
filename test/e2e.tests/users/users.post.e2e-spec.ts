@@ -1,5 +1,10 @@
 import { HttpStatus, INestApplication } from '@nestjs/common';
+// Вот такой импорт не работает
 import request from 'supertest';
+
+// Вот такой импорт работает
+// import * as request from 'supertest';
+
 import { UsersTestManager } from '../../utils/test.manager.users';
 import {
   TestsCreateUserModel,

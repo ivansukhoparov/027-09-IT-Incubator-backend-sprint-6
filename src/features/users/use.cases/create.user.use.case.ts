@@ -3,8 +3,8 @@ import { BcryptAdapter } from '../../../common/adapters/bcrypt.adapter';
 import { UserCreateInputModel } from '../api/admin/models/user.create.input.model';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { UsersRepository } from '../infrastructure/users.repository';
-// import bcrypt from 'bcrypt';
-const bcrypt = require('bcrypt');
+import bcrypt from 'bcrypt';
+// const bcrypt = require('bcrypt');
 
 export class CreateUserCommand {
   login: string;
