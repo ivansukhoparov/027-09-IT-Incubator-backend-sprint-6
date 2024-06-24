@@ -3,6 +3,8 @@ import { BcryptAdapter } from '../../../common/adapters/bcrypt.adapter';
 import { UserCreateInputModel } from '../api/admin/models/user.create.input.model';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { UsersRepository } from '../infrastructure/users.repository';
+// import bcrypt from 'bcrypt';
+const bcrypt = require('bcrypt');
 
 export class CreateUserCommand {
   login: string;
@@ -25,7 +27,8 @@ export class CreateUserUseCase implements ICommandHandler<CreateUserCommand> {
   ) {}
 
   async execute(command: CreateUserCommand) {
-    const hash = await this.cryptAdapter.createHash(command.password);
+    const hash = await bcrypt.hash(command.password, 10);
+    //await this.cryptAdapter.createHash(command.password);
 
     const newUserDto: CreateUserDto = {
       login: command.login,

@@ -7,6 +7,7 @@ import { UserDocument } from '../../../users/infrastructure/users.schema';
 import { InterlayerNotice } from '../../../../base/models/interlayer.notice';
 import { SessionInputModel, SessionModel, SessionUpdateModel } from '../api/models/session.input.models';
 import { TokenPair } from '../../auth/types/output';
+import { User } from '../../../users/infrastructure/enities/user';
 
 @Injectable()
 export class DevicesService {
@@ -16,7 +17,7 @@ export class DevicesService {
     protected readonly refreshToken: RefreshToken,
   ) {}
 
-  async createSession(sessionInputModel: SessionInputModel, user: UserDocument) {
+  async createSession(sessionInputModel: SessionInputModel, user: User) {
     const deviceId = uuid4();
     const accessToken = this.accessToken.create({
       userId: user.id,

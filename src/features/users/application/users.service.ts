@@ -3,6 +3,7 @@ import { UserType } from '../types/output';
 import { BcryptAdapter } from '../../../common/adapters/bcrypt.adapter';
 import { UserCreateInputModel } from '../api/admin/models/user.create.input.model';
 import { UsersRepository } from '../infrastructure/users.repository';
+import bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
@@ -13,7 +14,8 @@ export class UsersService {
 
   async create(inputModel: UserCreateInputModel, isConfirmed: boolean = false) {
     const createdAt = new Date().toISOString();
-    const hash = await this.cryptAdapter.createHash(inputModel.password);
+    const hash = await bcrypt.hash(inputModel.password, 10);
+    //await this.cryptAdapter.createHash(inputModel.password);
 
     const newUser: UserType = {
       login: inputModel.login,

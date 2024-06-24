@@ -11,6 +11,7 @@ const typeOrmModule = TypeOrmModule.forRoot({
   username: 'postgres',
   password: 'sa',
   database: 'bloggers_6',
+  logging: 'all',
   autoLoadEntities: true,
   synchronize: true,
 });

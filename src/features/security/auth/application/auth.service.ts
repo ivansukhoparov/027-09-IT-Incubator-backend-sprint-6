@@ -14,6 +14,7 @@ import { DevicesService } from '../../devices/application/devices.service';
 import { AccessToken } from '../../../../common/token.services/access-token.service';
 import { ERRORS_CODES, InterlayerNotice } from '../../../../base/models/interlayer.notice';
 import { TokenPair } from '../types/output';
+import bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
@@ -171,7 +172,8 @@ export class AuthService {
       return interlayerNotice;
     }
 
-    const isSuccess = await this.cryptAdapter.compareHash(loginDto.password, user.hash);
+    const isSuccess = bcrypt.compare(loginDto.password, user.hash);
+    //await this.cryptAdapter.compareHash(loginDto.password, user.hash);
     if (!isSuccess) {
       interlayerNotice.addError('Bad login or password', 'credentials', ERRORS_CODES.UNAUTHORIZED);
       return interlayerNotice;

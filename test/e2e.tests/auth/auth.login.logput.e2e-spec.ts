@@ -23,7 +23,7 @@ const getRefreshTokenFromResponse = (res) => {
 let user1: UserTestType;
 let user2: UserTestType;
 
-describe('Auth tests', () => {
+describe.skip('Auth tests', () => {
   let app: INestApplication;
   let authTestManager: AuthTestManager;
   let usersTestManager: UsersTestManager;

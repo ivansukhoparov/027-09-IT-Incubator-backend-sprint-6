@@ -1,5 +1,5 @@
 import { Column, Entity, JoinColumn, OneToOne, PrimaryColumn } from 'typeorm';
-import { User } from './User';
+import { User } from './user';
 
 @Entity()
 export class UserTokens {
@@ -11,8 +11,7 @@ export class UserTokens {
   userId: string;
 
   @Column()
-  refreshTokenMeta: string;
-
+  confirmationCodeMetaExp: string;
   @Column()
-  recoveryTokenMeta: string;
+  recoveryTokenMetaExp: string;
 }

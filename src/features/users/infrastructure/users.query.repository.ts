@@ -1,23 +1,22 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectDataSource } from '@nestjs/typeorm';
-import { DataSource } from 'typeorm';
+import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { UserOutputMeType } from '../types/output';
 import { UserOutputModel } from '../api/admin/models/user.ouput.model';
 import { QuerySortType, SearchType } from '../../../common/types/types';
+import { User } from './enities/user';
 
 @Injectable()
 export class UsersQueryRepository {
-  constructor(@InjectDataSource() protected dataSource: DataSource) {}
+  constructor(
+    @InjectDataSource() protected dataSource: DataSource,
+    @InjectRepository(User) public readonly repository: Repository<User>,
+  ) {}
 
   async getById(id: string): Promise<UserOutputModel> {
     try {
-      const result = await this.dataSource.query(
-        `
-             SELECT "id", "login", "email", "createdAt" FROM "Users"
-             WHERE "id" =  $1`,
-        [id],
-      );
-      return result[0];
+      const response = this.repository.findOneBy({ id: id });
+      return response;
     } catch {
       throw new NotFoundException();
     }

@@ -9,8 +9,8 @@ import { GetAllUsersUseCase } from './use.cases/get.all.users.use.case';
 import { BcryptAdapter } from '../../common/adapters/bcrypt.adapter';
 import { CqrsModule } from '@nestjs/cqrs';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserTokens } from './infrastructure/enities/UserTokens';
-import { User } from './infrastructure/enities/User';
+import { UserTokens } from './infrastructure/enities/user.tokens';
+import { User } from './infrastructure/enities/user';
 
 const useCases = [CreateUserUseCase, DeleteUserUseCase];
 

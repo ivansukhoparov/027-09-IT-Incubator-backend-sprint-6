@@ -1,42 +1,33 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectDataSource } from '@nestjs/typeorm';
-import { DataSource } from 'typeorm';
+import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { CreateUserDto } from '../types/output';
 import { UserUpdateDto } from '../types/input';
-import { User } from './enities/User';
+import { User } from './enities/user';
+import { InterlayerNotice } from '../../../base/models/interlayer.notice';
 
 @Injectable()
 export class UsersRepository {
-  constructor(@InjectDataSource() protected dataSource: DataSource) {}
+  constructor(@InjectRepository(User) public readonly repository: Repository<User>) {}
 
-  async createUser(newUserDto: CreateUserDto | User): Promise<string> {
+  async createUser(newUserDto: CreateUserDto | User) {
+    // const interlayerNotice: InterlayerNotice<string> = new InterlayerNotice<string>();
+    console.log('createUser');
     try {
-      const result = await this.dataSource.query(
-        `
-            INSERT INTO "Users"
-            ("login","email","hash","isConfirmed")
-            values($1,$2,$3,$4)
-            RETURNING id
-        `,
-        [newUserDto.login, newUserDto.email, newUserDto.hash, newUserDto.isConfirmed],
-      );
-      return result[0].id;
-    } catch {
+      const response = await this.repository.save({ ...newUserDto });
+      console.log('createUser', response);
+      return response.id;
+    } catch (err) {
+      console.log(err);
       throw new NotFoundException();
     }
   }
 
   async getUserById(id: string) {
     try {
-      const result = await this.dataSource.query(
-        `
-            SELECT * FROM "Users"
-                WHERE "id" = $1
-        `,
-        [id],
-      );
-
-      return result[0];
+      const response = await this.repository.findOneBy({ id: id });
+      console.log('getUserById', response);
+      return response;
     } catch {
       throw new NotFoundException();
     }
@@ -44,11 +35,9 @@ export class UsersRepository {
 
   async getUserByLoginOrEmail(loginOrEmail: string) {
     try {
-      const result = await this.dataSource.query(
-        `SELECT * FROM "Users"
-               WHERE "login" = '${loginOrEmail}' OR "email" = '${loginOrEmail}'`,
-      );
-      return result[0];
+      const response = await this.repository.findOne({ where: { login: loginOrEmail } || { email: loginOrEmail } });
+      console.log('getUserByLoginOrEmail', response);
+      return response;
     } catch {
       throw new NotFoundException();
     }
@@ -56,37 +45,19 @@ export class UsersRepository {
 
   async deleteUser(id: string) {
     try {
-      const result = await this.dataSource.query(
-        `DELETE FROM "Users"
-             WHERE "id" = $1 `,
-        [id],
-      );
-      if (result[1] === 0) {
-        throw new NotFoundException();
-      }
-      return;
+      const response = await this.repository.softDelete({ id: id });
+      console.log('deleteUser', response);
+      return response;
     } catch {
       throw new NotFoundException();
     }
   }
 
-  async updateUser(id: string, userUpdateDto: UserUpdateDto): Promise<boolean> {
+  async updateUser(id: string, userUpdateDto: UserUpdateDto) {
     try {
-      const setData = Object.keys(userUpdateDto)
-        .map((key: any) => {
-          return `"${key}"='${userUpdateDto[key]}'`;
-        })
-        .join();
-
-      const result = await this.dataSource.query(
-        `
-            UPDATE "Users"
-            SET ${setData}
-            WHERE "id" = $1
-        `,
-        [id],
-      );
-      return !!result[1];
+      const response = await this.repository.update({ id: id }, { ...userUpdateDto });
+      console.log('update', response);
+      return response;
     } catch (err) {
       throw new NotFoundException();
     }
